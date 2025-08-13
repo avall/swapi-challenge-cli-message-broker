@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * CoreException
+ *
+ * @author alex.vall
+ */
 @Data
 @Builder
 @AllArgsConstructor

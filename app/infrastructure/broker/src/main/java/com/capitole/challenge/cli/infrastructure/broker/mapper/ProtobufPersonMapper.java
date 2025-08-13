@@ -9,12 +9,15 @@ import com.capitole.challenge.cli.infrastructure.broker.proto.PersonProtos;
  * This class is used to map domain Person to protobuf and vice versa.
  */
 public class ProtobufPersonMapper {
+    private ProtobufPersonMapper() {
+    }
+
 
     public static PersonProtos.Person toProto(Person person) {
-        PersonProtos.Person.Builder builder = PersonProtos.Person.newBuilder()
+        return PersonProtos.Person.newBuilder()
                 .setName(person.getName())
                 .setEmail(person.getEmail())
-                .setId(person.getId());
-        return builder.build();
+                .setId(person.getId())
+            .build();
     }
 }

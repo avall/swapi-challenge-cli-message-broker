@@ -8,17 +8,12 @@ import org.springframework.context.ApplicationContext;
 
 @SpringBootTest(
     classes = {Application.class},
-    webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-    properties = {})
+    webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class ApplicationTest {
   @Autowired ApplicationContext applicationContext;
 
   @Test
-  void testMain() {
-    // Setup
-    // Run the test
-    Assertions.assertAll(
-
-    );
+  void contextLoads() {
+    Assertions.assertNotNull(applicationContext);
   }
 }

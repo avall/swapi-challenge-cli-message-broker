@@ -6,6 +6,11 @@ import com.capitole.challenge.cli.domain.decorator.Interactor;
 import com.capitole.challenge.cli.domain.model.Person;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author alex.vall
+ *
+ * This class is used to send domain Person to Kafka via MessagePublisherPort.
+ */
 @RequiredArgsConstructor
 @Interactor
 public class SendMessageInteractor implements SendMessageUseCase {

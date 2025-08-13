@@ -5,9 +5,8 @@ import com.capitole.challenge.cli.domain.model.Person;
 import com.capitole.challenge.cli.infrastructure.command.dto.PersonDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CommandLineApp {
 
     private final SendMessageUseCase sendMessageUseCase;
@@ -25,14 +25,18 @@ public class CommandLineApp {
     public void run(String[] args) throws Exception {
       String filePath = getFilePath(args);
       if (filePath == null) {
-        System.out.println("Usage: java -jar app.jar --file=/path/to/person.json");
+        log.info("Usage: java -jar app.jar --file=/path/to/person.json");
+        return;
+      }
+      if (!new File(filePath).exists()) {
+        log.info("File not found: {}", filePath);
         return;
       }
 
       PersonDto dto = objectMapper.readValue(new File(filePath), PersonDto.class);
       Person person = mapper(dto);
       sendMessageUseCase.execute(new SendMessageUseCase.Input(person));
-      System.out.println("Sent person to Kafka topic 'topic-capitole-protobuf-message'");
+      log.info("Sent person to Kafka topic 'topic-capitole-protobuf-message'");
     }
 
   private Person mapper(PersonDto dto) {
