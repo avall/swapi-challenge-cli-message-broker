@@ -2,6 +2,7 @@ package com.capitole.challenge.cli.infrastructure.command;
 
 import com.capitole.challenge.cli.application.port.input.SendMessageUseCase;
 import com.capitole.challenge.cli.domain.model.Person;
+import com.capitole.challenge.cli.infrastructure.command.dto.PersonDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import lombok.Data;
@@ -16,40 +17,41 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class CommandLineApp implements CommandLineRunner {
+public class CommandLineApp {
 
     private final SendMessageUseCase sendMessageUseCase;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Override
-    public void run(String... args) throws Exception {
-        String filePath = null;
-        for (String arg : args) {
-            if (arg.startsWith("--file=")) {
-                filePath = arg.substring("--file=".length());
-            } else if (arg.startsWith("-f=")) {
-                filePath = arg.substring("-f=".length());
-            }
-        }
-        if (filePath == null) {
-            System.out.println("Usage: java -jar app.jar --file=/path/to/person.json");
-            return;
-        }
+    public void run(String[] args) throws Exception {
+      String filePath = getFilePath(args);
+      if (filePath == null) {
+        System.out.println("Usage: java -jar app.jar --file=/path/to/person.json");
+        return;
+      }
 
-        PersonJson pj = objectMapper.readValue(new File(filePath), PersonJson.class);
-        Person person = Person.builder()
-                .name(pj.getName())
-                .id(pj.getId())
-                .email(pj.getEmail())
-                .build();
-        sendMessageUseCase.execute(new SendMessageUseCase.Input(person));
-        System.out.println("Sent person to Kafka topic 'topic-capitole-protobuf-message'");
+      PersonDto dto = objectMapper.readValue(new File(filePath), PersonDto.class);
+      Person person = mapper(dto);
+      sendMessageUseCase.execute(new SendMessageUseCase.Input(person));
+      System.out.println("Sent person to Kafka topic 'topic-capitole-protobuf-message'");
     }
 
-    @Data
-    private static class PersonJson {
-        private String name;
-        private int id;
-        private String email;
+  private Person mapper(PersonDto dto) {
+    return Person.builder()
+            .name(dto.getName())
+            .id(dto.getId())
+            .email(dto.getEmail())
+            .build();
+  }
+
+  private String getFilePath(String[] args) {
+    String filePath = null;
+    for (String arg : args) {
+        if (arg.startsWith("--file=")) {
+            filePath = arg.substring("--file=".length());
+        } else if (arg.startsWith("-f=")) {
+            filePath = arg.substring("-f=".length());
+        }
     }
+    return filePath;
+  }
 }

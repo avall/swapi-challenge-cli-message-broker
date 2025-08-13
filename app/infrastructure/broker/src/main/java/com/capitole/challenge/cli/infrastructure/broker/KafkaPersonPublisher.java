@@ -9,6 +9,11 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author alex.vall
+ *
+ * This class is used to publish domain Person to Kafka via StreamBridge.
+ */
 @Component
 @RequiredArgsConstructor
 public class KafkaPersonPublisher implements MessagePublisherPort<Person> {
