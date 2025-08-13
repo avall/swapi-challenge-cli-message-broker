@@ -1,0 +1,28 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    implementation project(':app:domain')
+    implementation project(':app:application')
+    implementation project(':app:infrastructure:command')
+    implementation project(':app:infrastructure:broker')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+springBoot {
+    mainClass = 'com.capitole.challenge.cli.main.Application'
+}
+
+bootJar {
+    enabled = true
+    archiveBaseName = 'cli-app'
+    archiveVersion = '0.0.1-SNAPSHOT'
+}
+
+jar {
+    enabled = false
+}

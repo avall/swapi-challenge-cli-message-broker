@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation project(':app:application')
+    implementation project(':app:domain')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
