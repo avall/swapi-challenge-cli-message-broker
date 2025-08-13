@@ -20,6 +20,15 @@ java {
     }
 }
 
+// Configure protobuf sources to include the existing proto under src/main/resources
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/resources/proto'
+        }
+    }
+}
+
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.25.3"
