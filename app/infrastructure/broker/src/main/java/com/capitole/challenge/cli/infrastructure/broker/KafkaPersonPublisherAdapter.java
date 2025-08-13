@@ -16,18 +16,17 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class KafkaPersonPublisher implements MessagePublisherPort<Person> {
+public class KafkaPersonPublisherAdapter implements MessagePublisherPort<Person> {
 
-    private final StreamBridge streamBridge;
+  private static final String BINDING_NAME = "person-out-0";
+  private final StreamBridge streamBridge;
 
-    private static final String BINDING_NAME = "person-out-0";
-
-    @Override
-    public void publish(Person person) {
-        byte[] payload = ProtobufPersonMapper.toProto(person).toByteArray();
-        Message<byte[]> message = MessageBuilder.withPayload(payload)
-                .setHeader("contentType", "application/x-protobuf")
-                .build();
-        streamBridge.send(BINDING_NAME, message);
-    }
+  @Override
+  public void publish(Person person) {
+      byte[] payload = ProtobufPersonMapper.toProto(person).toByteArray();
+      Message<byte[]> message = MessageBuilder.withPayload(payload)
+              .setHeader("contentType", "application/x-protobuf")
+              .build();
+      streamBridge.send(BINDING_NAME, message);
+  }
 }
