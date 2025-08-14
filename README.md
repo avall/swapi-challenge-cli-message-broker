@@ -2,6 +2,7 @@
 CLI tool that sends a protobuf Person message to a Kafka topic using Spring Cloud Stream.
 
 ## Use Case
+[Challenge description](addons/docs/Software%20Engineer%20Quiz.pdf) \
 Read a JSON file from disk, transform it into a protobuf Person, and publish the bytes to a Kafka topic so that other systems can consume it.
 
 ## Tech Stack
