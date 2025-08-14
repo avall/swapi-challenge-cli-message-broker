@@ -26,7 +26,7 @@ This repo includes a docker-compose.yml that exposes Kafka on localhost:9092 (an
 2) Build the project
 - ./gradlew clean build
 
-3) Run the CLI app
+3) Run the CLI app from terminal located in the root folder of the project
 - java -jar app/main/build/libs/cli-app-0.0.1-SNAPSHOT.jar --file=./addons/test/person.json
 Or with shorthand flag:
 - java -jar app/main/build/libs/cli-app-0.0.1-SNAPSHOT.jar -f=./addons/test/person.json
