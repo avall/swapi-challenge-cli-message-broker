@@ -33,9 +33,10 @@ Or with shorthand flag:
 
 Sample JSON files:
 - addons/test/person.json
-- app/main/src/main/resources/sample-person.json
 
 Topic: topic-capitole-protobuf-message
+
+4) Check the kafka UI (localhost:9999)
 
 ## Configuration
 The relevant properties are in app/main/src/main/resources/application.yml
@@ -44,14 +45,6 @@ The relevant properties are in app/main/src/main/resources/application.yml
 - Producer uses application/x-protobuf and ByteArraySerializer
 You can override env vars like APP_KAFKA_BROKERS or APP_TOPIC_PERSON when running.
 
-## Consuming the message
-The payload is protobuf bytes (Person). Use a protobuf-aware consumer to decode.
-- Console consumer example (raw bytes):
-  kafka-console-consumer --bootstrap-server localhost:9092 \
-    --topic topic-capitole-protobuf-message --from-beginning \
-    --property print.key=true --property value.deserializer=org.apache.kafka.common.serialization.ByteArrayDeserializer
-- Java consumer example (decoding):
-  PersonProtos.Person parsed = PersonProtos.Person.parseFrom(payloadBytes);
 
 ## Troubleshooting
 - If the CLI prints Usage, ensure you provide --file=/path/to/person.json or -f=...
