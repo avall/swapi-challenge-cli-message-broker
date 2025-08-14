@@ -16,7 +16,7 @@ Read a JSON file from disk, transform it into a protobuf Person, and publish the
 - Application use case is annotated with a custom `@Interactor`; it’s discovered by Spring via a ComponentScan filter to avoid Spring dependencies in the application module.
 
 ## Prerequisites
-- Java 17
+- Java 17 (to run locally)
 - Docker (for Kafka via docker-compose)
 
 ## Quickstart
