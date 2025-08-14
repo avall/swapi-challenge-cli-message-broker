@@ -1,0 +1,16 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'broker-tool'
+
+include 'app'
+include 'app:domain'
+include 'app:application'
+include 'app:infrastructure:command'
+include 'app:infrastructure:broker'
+include 'app:main'
+

@@ -1,0 +1,74 @@
+@startuml
+
+skinparam linetype ortho
+skinparam component<<Spring Boot>> {
+    backgroundColor White
+    borderColor Grey
+}
+
+skinparam component {
+    backgroundColor White
+    borderColor CornflowerBlue
+    ArrowColor DarkBlue
+}
+skinparam note {
+    backgroundColor LightYellow
+    borderColor Tan
+}
+
+component [people-list] <<Spring Boot>> as cli_tool {
+
+component [app] <<Spring Boot>> as app {
+  component [main] as main {
+    component [domain] as domain
+    component [application] as application
+    component [infrastructure] as infrastructure {
+      component [command] as adapterCommand {
+        component dto as commandDto
+        component cli as CommandLineApp
+        cli -up-> commandDto
+        cli -up-> application : uses SendMessageUseCase
+        note right of cli
+          CLI entrypoint
+          CommandLineApp
+        end note
+      }
+      note bottom of adapterCommand
+        Input Adapter (CLI)
+        PersonDto
+      end note
+      component [broker] as adapterBroker {
+        component mapper as ProtobufPersonMapper
+        component publisher as KafkaPersonPublisherAdapter
+        component proto as "person.proto"
+        publisher -up-> mapper
+        mapper -up-> proto
+        note right of publisher
+          Publishes to Kafka via StreamBridge
+          binding: person-out-0
+        end note
+      }
+      note bottom of adapterBroker
+        Output Adapter (Message Broker)
+        Implements MessagePublisherPort<Person>
+      end note
+    }
+  }
+
+  application -up-> domain
+  infrastructure -up-> application
+
+
+  note right of domain
+  Domain Model
+  end note
+
+  note right of application
+  Ports <<interfaces>>
+  Input Ports Impl <<Interactors>>
+  Services
+  end note
+
+}
+}
+@enduml

@@ -1,0 +1,53 @@
+server:
+  port: 8082
+
+spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: NON_NULL
+    time-zone: UTC
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSX
+    deserialization:
+      fail-on-unknown-properties: false
+  cloud:
+    stream:
+      default-binder: kafka
+      bindings:
+        person-out-0:
+          destination: ${APP_TOPIC_PERSON:topic-capitole-protobuf-message}
+          content-type: application/x-protobuf
+          producer:
+            use-native-encoding: true
+      kafka:
+        binder:
+          brokers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+          replication-factor: ${APP_KAFKA_REPLICATION_FACTOR:1}
+          auto-create-topics: ${APP_KAFKA_AUTO_CREATE_TOPICS:true}
+          required-acks: all
+          configuration:
+            security.protocol: ${APP_KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+            sasl.mechanism: ${APP_KAFKA_SASL_MECHANISM:}
+            ssl.truststore.location: ${APP_KAFKA_TRUSTSTORE:}
+            sasl.jaas.config: ${APP_KAFKA_SASL_JAAS:}
+          producer-properties:
+            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+            value.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+          consumer-properties:
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+          min-partition-count: ${APP_KAFKA_PARTITION_COUNT:1}
+        bindings:
+          person-out-0:
+            producer:
+              message-key-expression: headers['key']
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+
+logging:
+  level:
+    org.zalando.logbook: TRACE
