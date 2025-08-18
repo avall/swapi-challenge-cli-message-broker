@@ -3,6 +3,7 @@ package com.capitole.challenge.cli.infrastructure.broker;
 import com.capitole.challenge.cli.application.port.output.MessagePublisherPort;
 import com.capitole.challenge.cli.domain.model.Person;
 import com.capitole.challenge.cli.infrastructure.broker.mapper.ProtobufPersonMapper;
+import com.capitole.challenge.cli.infrastructure.broker.proto.PersonProtos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
@@ -23,8 +24,8 @@ public class KafkaPersonPublisherAdapter implements MessagePublisherPort<Person>
 
   @Override
   public void publish(Person person) {
-      byte[] payload = ProtobufPersonMapper.toProto(person).toByteArray();
-      Message<byte[]> message = MessageBuilder.withPayload(payload)
+      PersonProtos.Person payload = ProtobufPersonMapper.toProto(person);
+      Message<PersonProtos.Person> message = MessageBuilder.withPayload(payload)
               .setHeader("contentType", "application/x-protobuf")
               .build();
       streamBridge.send(BINDING_NAME, message);
