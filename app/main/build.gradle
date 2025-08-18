@@ -2,6 +2,11 @@ plugins {
     id 'org.springframework.boot'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17) // Or your desired Java version, e.g., 21
+    }
+}
 dependencies {
     implementation project(':app:domain')
     implementation project(':app:application')
@@ -21,6 +26,26 @@ bootJar {
     enabled = true
     archiveBaseName = 'cli-app'
     archiveVersion = '0.0.1-SNAPSHOT'
+    mainClass = 'com.capitole.challenge.cli.main.Application'
+}
+
+// Additional BootJar for the Consumer entry point
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
+tasks.register('bootJarConsumer', BootJar) {
+    group = 'build'
+    description = 'Assembles an executable jar archive for the Consumer application.'
+    mainClass = 'com.capitole.challenge.cli.main.Consumer'
+    archiveBaseName = 'cli-consumer'
+    archiveVersion = '0.0.1-SNAPSHOT'
+    classpath = sourceSets.main.runtimeClasspath
+    enabled = true
+    targetJavaVersion.set(java.targetCompatibility)
+}
+
+// Ensure `gradlew build` also produces the consumer jar
+tasks.named('build') {
+    dependsOn tasks.named('bootJarConsumer')
 }
 
 jar {

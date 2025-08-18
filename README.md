@@ -55,3 +55,21 @@ You can override env vars like APP_KAFKA_BROKERS or APP_TOPIC_PERSON when runnin
 ## Definition of Done
 - The message can be read by any consumer subscribing to topic-capitole-protobuf-message and decoding with the provided protobuf schema.
 
+
+
+## Running the Producer (CLI) and the Consumer
+
+Producer (already packaged as cli-app):
+- Build: ./gradlew clean build
+- Run: java -jar app/main/build/libs/cli-app-0.0.1-SNAPSHOT.jar --file=./addons/test/person.json
+  - Shorthand: java -jar app/main/build/libs/cli-app-0.0.1-SNAPSHOT.jar -f=./addons/test/person.json
+
+Consumer (packaged as cli-consumer via a dedicated BootJar task):
+- Build only the consumer jar: ./gradlew :app:main:bootJarConsumer
+  - Or build everything: ./gradlew clean build (also produces the consumer jar)
+- Run: java -jar app/main/build/libs/cli-consumer-0.0.1-SNAPSHOT.jar
+
+Notes:
+- Ensure Kafka and Schema Registry from docker-compose are up before starting the consumer.
+- The consumer binds to spring.cloud.function.definition=person-consumer and listens on the topic configured by APP_TOPIC_PERSON (default topic-capitole-protobuf-message).
+- You should see logs like "PersonConsumer#accept, message=..." when messages arrive.

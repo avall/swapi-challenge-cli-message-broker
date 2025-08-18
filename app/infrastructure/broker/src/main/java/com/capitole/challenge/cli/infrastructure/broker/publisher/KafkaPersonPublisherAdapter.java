@@ -1,4 +1,4 @@
-package com.capitole.challenge.cli.infrastructure.broker;
+package com.capitole.challenge.cli.infrastructure.broker.publisher;
 
 import com.capitole.challenge.cli.application.port.output.MessagePublisherPort;
 import com.capitole.challenge.cli.domain.model.Person;
