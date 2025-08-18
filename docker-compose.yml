@@ -11,6 +11,9 @@ services:
       ALLOW_ANONYMOUS_LOGIN: "yes"
       ZOOKEEPER_LOG4J_ROOT_LOGLEVEL: INFO, WARN, ERROR
       ZOOKEEPER_JUTE_MAXBUFFER: 369296129
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_log:/var/lib/zookeeper/log
 
   kafka:
     image: confluentinc/cp-server:7.3.0
@@ -47,6 +50,8 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx1g -Xms1g"
       KAFKA_LOG4J_ROOT_LOGLEVEL: INFO, WARN, ERROR
       # KAFKA_LOG4J_LOGGERS: "org.apache.kafka=DEBUG, kafka.network=DEBUG, kafka.server=DEBUG"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -61,3 +66,7 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:29092"
       KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
 
+volumes:
+  zookeeper_data:
+  zookeeper_log:
+  kafka_data:
