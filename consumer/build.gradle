@@ -44,25 +44,6 @@ protobuf {
     }
 }
 
-// Additional BootJar for the Consumer entry point
-//import org.springframework.boot.gradle.tasks.bundling.BootJar
-//
-//tasks.register('bootJarConsumer', BootJar) {
-//    group = 'build'
-//    description = 'Assembles an executable jar archive for the Consumer application.'
-//    mainClass = 'com.capitole.challenge.cli.main.Consumer'
-//    archiveBaseName = 'cli-consumer'
-//    archiveVersion = '0.0.1-SNAPSHOT'
-//    classpath = sourceSets.main.runtimeClasspath
-//    enabled = true
-//    targetJavaVersion.set(java.targetCompatibility)
-//}
-//
-//// Ensure `gradlew build` also produces the consumer jar
-//tasks.named('build') {
-//    dependsOn tasks.named('bootJarConsumer')
-//}
-
 jar {
     enabled = false
 }

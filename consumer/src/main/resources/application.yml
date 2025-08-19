@@ -14,9 +14,6 @@ spring:
       definition: person-consumer
     stream:
       default-binder: kafka
-
-
-
       bindings:
         person-consumer-in-0:
           destination: ${APP_TOPIC_PERSON:topic-capitole-protobuf-message}
