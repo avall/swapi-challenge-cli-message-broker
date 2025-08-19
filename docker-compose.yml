@@ -49,15 +49,53 @@ services:
       KAFKA_REPLICA_FETCH_MAX_BYTES: 369296129
       KAFKA_HEAP_OPTS: "-Xmx1g -Xms1g"
       KAFKA_LOG4J_ROOT_LOGLEVEL: INFO, WARN, ERROR
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+
       # KAFKA_LOG4J_LOGGERS: "org.apache.kafka=DEBUG, kafka.network=DEBUG, kafka.server=DEBUG"
     volumes:
       - kafka_data:/var/lib/kafka/data
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.3.0
+    hostname: schema-registry
+    container_name: cli-schema-registry
+    depends_on:
+      - zookeeper
+      - kafka
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: curl --output /dev/null --silent --head --fail http://schema-registry:8081/subjects
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:29092
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_DEBUG: "true"
+
+  schema-registry-ui:
+    image: landoop/schema-registry-ui:latest
+    container_name: cli-schema-registry-ui
+    hostname: schema-registry-ui
+    ports:
+      - "8000:8000"
+    environment:
+      SCHEMAREGISTRY_URL: http://schema-registry:8081
+      PROXY: "true"
+      ALLOW_GLOBAL: "true"
+      ALLOW_TRANSITIVE: "true"
+      ALLOW_DELETION: "true"
+    depends_on:
+      - schema-registry
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: cli-kafka-ui
     ports:
-      - "9999:8080"
+      - "9000:8080"
     depends_on:
       - zookeeper
       - kafka
@@ -65,6 +103,17 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:29092"
       KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: cli-kafdrop
+    ports:
+      - "9999:9000"
+    environment:
+      KAFKA_BROKERCONNECT: 'PLAINTEXT://kafka:29092'
+    depends_on:
+      - kafka
+      - schema-registry
 
 volumes:
   zookeeper_data:

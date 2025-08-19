@@ -1,7 +1,7 @@
 package com.capitole.challenge.cli.infrastructure.broker.mapper;
 
 import com.capitole.challenge.cli.domain.model.Person;
-import com.capitole.challenge.cli.infrastructure.broker.proto.PersonProtos;
+import com.capitole.challenge.cli.infrastructure.broker.proto.ProtoPerson;
 
 /**
  * @author alex.vall
@@ -13,8 +13,8 @@ public class ProtobufPersonMapper {
     }
 
 
-    public static PersonProtos.Person toProto(Person person) {
-        return PersonProtos.Person.newBuilder()
+    public static ProtoPerson.Person toProto(Person person) {
+        return ProtoPerson.Person.newBuilder()
                 .setName(person.getName())
                 .setEmail(person.getEmail())
                 .setId(person.getId())
