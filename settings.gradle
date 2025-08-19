@@ -13,4 +13,5 @@ include 'app:application'
 include 'app:infrastructure:command'
 include 'app:infrastructure:broker'
 include 'app:main'
+include 'consumer'
 

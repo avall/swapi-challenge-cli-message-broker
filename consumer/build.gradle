@@ -1,5 +1,7 @@
 plugins {
+    id 'java'
     id 'org.springframework.boot'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 java {
@@ -8,25 +10,38 @@ java {
     }
 }
 dependencies {
-    implementation project(':app:domain')
-    implementation project(':app:application')
-    implementation project(':app:infrastructure:command')
-    implementation project(':app:infrastructure:broker')
-
     implementation 'org.springframework.boot:spring-boot-starter'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'org.springframework.cloud:spring-cloud-stream'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
+    implementation 'io.confluent:kafka-protobuf-serializer:7.6.1'
+
+    implementation 'com.google.protobuf:protobuf-java:3.25.3'
 }
 
 springBoot {
-    mainClass = 'com.capitole.challenge.cli.main.Application'
+    mainClass = 'com.capitole.challenge.cli.consumer.Application'
 }
 
 bootJar {
     enabled = true
-    archiveBaseName = 'cli-app'
+    archiveBaseName = 'cli-consumer'
     archiveVersion = '0.0.1-SNAPSHOT'
-    mainClass = 'com.capitole.challenge.cli.main.Application'
+    mainClass = 'com.capitole.challenge.cli.consumer.Application'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.3"
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {}
+            }
+        }
+    }
 }
 
 // Additional BootJar for the Consumer entry point
@@ -51,3 +66,14 @@ bootJar {
 jar {
     enabled = false
 }
+
+// Configure protobuf sources to include the existing proto under src/main/resources
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/resources/proto'
+        }
+    }
+}
+
+

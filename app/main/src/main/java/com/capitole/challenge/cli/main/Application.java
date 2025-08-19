@@ -15,7 +15,7 @@ import org.springframework.context.annotation.FilterType;
  * into the Spring Context any class that implements the Interactor.
  */
 @ComponentScan(
-    basePackages = {"com.capitole.challenge.*"},
+    basePackages = {"com.capitole.challenge.cli.*"},
     includeFilters = @ComponentScan.Filter(
     type = FilterType.ANNOTATION,
     classes = {Interactor.class})

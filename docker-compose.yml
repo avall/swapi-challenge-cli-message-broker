@@ -58,7 +58,7 @@ services:
   schema-registry:
     image: confluentinc/cp-schema-registry:7.3.0
     hostname: schema-registry
-    container_name: schema-registry
+    container_name: cli-schema-registry
     depends_on:
       - zookeeper
       - kafka
@@ -76,11 +76,26 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
       SCHEMA_REGISTRY_DEBUG: "true"
 
+  schema-registry-ui:
+    image: landoop/schema-registry-ui:latest
+    container_name: cli-schema-registry-ui
+    hostname: schema-registry-ui
+    ports:
+      - "8000:8000"
+    environment:
+      SCHEMAREGISTRY_URL: http://schema-registry:8081
+      PROXY: "true"
+      ALLOW_GLOBAL: "true"
+      ALLOW_TRANSITIVE: "true"
+      ALLOW_DELETION: "true"
+    depends_on:
+      - schema-registry
+
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: cli-kafka-ui
     ports:
-      - "9999:8080"
+      - "9000:8080"
     depends_on:
       - zookeeper
       - kafka
@@ -88,6 +103,17 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:29092"
       KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: cli-kafdrop
+    ports:
+      - "9999:9000"
+    environment:
+      KAFKA_BROKERCONNECT: 'PLAINTEXT://kafka:29092'
+    depends_on:
+      - kafka
+      - schema-registry
 
 volumes:
   zookeeper_data:

@@ -8,8 +8,8 @@ dependencies {
     implementation project(':app:domain')
 
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.cloud:spring-cloud-stream:4.1.2'
-    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka:4.1.2'
+    implementation 'org.springframework.cloud:spring-cloud-stream'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
     implementation 'io.confluent:kafka-protobuf-serializer:7.6.1'
 
     implementation 'com.google.protobuf:protobuf-java:3.25.3'
