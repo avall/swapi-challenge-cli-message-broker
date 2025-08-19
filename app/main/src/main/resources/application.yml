@@ -35,15 +35,7 @@ spring:
             value.serializer: io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer
             schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:8081}
             auto.register.schemas: true
-            properties:
-              specific.protobuf.value.type: com.capitole.challenge.cli.infrastructure.broker.proto.ProtoPerson
           min-partition-count: ${APP_KAFKA_PARTITION_COUNT:1}
-#        bindings:
-#          person-out-0:
-#            producer:
-#              topic:
-#                properties:
-#                  schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:8081}
 logging:
   level:
     org.zalando.logbook: TRACE

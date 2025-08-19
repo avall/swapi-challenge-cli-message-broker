@@ -19,8 +19,6 @@ public class PersonConsumer implements Consumer<Message<ProtoPerson.Person>> {
 
   @Override
   public void accept(final Message<ProtoPerson.Person> message) {
-    log.info("\nPersonConsumer#accept, \nMessage={} ", message);
-    var pp = message.getPayload();
-    var email = pp.getEmail();
+    log.info("\nPersonConsumer#accept, \nid={} \nname={} \nemail={} ",  message.getPayload().getId(), message.getPayload().getName(), message.getPayload().getEmail());
   }
 }

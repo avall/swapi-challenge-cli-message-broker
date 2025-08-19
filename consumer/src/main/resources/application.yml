@@ -40,17 +40,8 @@ spring:
             value.deserializer: io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer
             schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:8081}
             auto.register.schemas: true
-            properties:
-              specific.protobuf.value.type: com.capitole.challenge.cli.infrastructure.broker.proto.ProtoPerson
+            specific.protobuf.value.type: com.capitole.challenge.cli.infrastructure.broker.proto.ProtoPerson$Person
           min-partition-count: ${APP_KAFKA_PARTITION_COUNT:1}
-
-#        bindings:
-#          person-consumer--in-0:
-#            consumer:
-#              topic:
-#                properties:
-#                  retention.ms: 0
-#                  schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:8081}
 
 logging:
   level:
